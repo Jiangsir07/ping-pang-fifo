@@ -1,0 +1,12 @@
+# Vivado project (generated, not source)
+vivado_project/
+
+# Simulation artifacts
+sim/work/
+sim/*.vcd
+sim/*.wlf
+sim/transcript
+
+# Temp files
+_parts.txt
+_temp_*.tcl
