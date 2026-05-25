@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 1070" width="1480" height="1070">
+<text x="740.0" y="26.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="17" fill="#0D47A1" text-anchor="middle" font-weight="bold">DDR3 乒乓缓冲 FPGA 设计 — 信号流框图</text>
+<rect x="15.0" y="42.0" width="480.0" height="1015.0" fill="#E3F2FD" stroke="none" stroke-width="0" rx="0"/>
+<rect x="495.0" y="42.0" width="520.0" height="1015.0" fill="#FFF8E1" stroke="none" stroke-width="0" rx="0"/>
+<line x1="495.0" y1="42.0" x2="495.0" y2="1055.0" stroke="#90CAF9" stroke-width="2" stroke-dasharray="8,4"/>
+<line x1="1015.0" y1="42.0" x2="1015.0" y2="1055.0" stroke="#FFE082" stroke-width="2" stroke-dasharray="8,4"/>
+<text x="255.0" y="57.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="bold">clk 域（用户逻辑）</text>
+<text x="755.0" y="57.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="11" fill="#E65100" text-anchor="middle" font-weight="bold">clk_ddr3_X 域（MIG UI 时钟）</text>
+<text x="1200.0" y="57.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="11" fill="#546E7A" text-anchor="middle" font-weight="bold">DDR3 PHY + 输出路径</text>
+<rect x="25.0" y="75.0" width="1460.0" height="395.0" fill="#FFF3E0" stroke="#E65100" stroke-width="2" rx="6"/>
+<text x="35.0" y="94.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="13" fill="#E65100" text-anchor="start" font-weight="bold">通道 0 — fifo_ddr_0（mig_7series_0, ADDR_INITIAL=0x0000_0000）</text>
+<rect x="30.0" y="110.0" width="160.0" height="70.0" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5" rx="5"/>
+<text x="110.0" y="149.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">din[31:0]</text>
+<text x="110.0" y="165.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >din_empty / alempty</text>
+<text x="110.0" y="195.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#666" text-anchor="middle" >外部输入</text>
+<rect x="30.0" y="205.0" width="200.0" height="115.0" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.5" rx="5"/>
+<text x="130.0" y="266.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">写控制逻辑</text>
+<text x="130.0" y="282.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_flag_0, wr_cnt[31:0]</text>
+<text x="130.0" y="298.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_flag_0=1: 写使能→DDR3_0</text>
+<text x="130.0" y="314.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_cnt满addr_size→flag翻转</text>
+<text x="130.0" y="330.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >din_rd_en 受prog_full背压</text>
+<rect x="250.0" y="205.0" width="200.0" height="115.0" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="1.5" rx="5"/>
+<text x="350.0" y="266.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">输入数据分发</text>
+<text x="350.0" y="282.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_0_din = din  (32-bit)</text>
+<text x="350.0" y="298.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_0_din_wr_en</text>
+<text x="350.0" y="314.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >  = din_rd_en & wr_flag_0</text>
+<text x="350.0" y="330.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >din_prog_full → 暂停din_rd_en</text>
+<rect x="500.0" y="110.0" width="180.0" height="75.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="151.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">写异步 FIFO</text>
+<text x="590.0" y="167.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >fifo_async_1024x32</text>
+<text x="590.0" y="183.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_clk=clk | rd_clk=clk_ddr3_0</text>
+<rect x="500.0" y="215.0" width="180.0" height="95.0" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="266.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">rd_flag 状态机</text>
+<text x="590.0" y="282.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_flag=0: 写阶段</text>
+<text x="590.0" y="298.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_flag=1: 读阶段</text>
+<text x="590.0" y="314.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >addr[31:0] 地址生成</text>
+<text x="590.0" y="330.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >addr满addr_size→翻转</text>
+<rect x="500.0" y="355.0" width="180.0" height="85.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="401.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">读异步 FIFO</text>
+<text x="590.0" y="417.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >fifo_async_1024x32</text>
+<text x="590.0" y="433.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_clk=clk_ddr3 | rd_clk=clk</text>
+<text x="590.0" y="449.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >prog_full→app_en_rd暂停</text>
+<rect x="730.0" y="155.0" width="270.0" height="305.0" fill="#FFEBEE" stroke="#B71C1C" stroke-width="2" rx="5"/>
+<text x="865.0" y="311.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">mig_7series_0</text>
+<text x="865.0" y="327.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_wdf_data = {32'd0,fifo_wr_dout}[63:0]</text>
+<text x="865.0" y="343.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_cmd = 000(写) / 001(读)</text>
+<text x="865.0" y="359.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_addr = {addr[0+:25],3'b000}</text>
+<text x="865.0" y="375.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_en_wr = ~rd_flag & ~wr_empty & rdy</text>
+<text x="865.0" y="391.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_en_rd = rd_flag & ~fifo_rd_prog_full</text>
+<text x="865.0" y="407.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_en = app_en_wr | app_en_rd</text>
+<text x="865.0" y="423.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_wr_full = rd_flag && fifo_wr_rd_en</text>
+<text x="865.0" y="439.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >  → data_cross → clk 域</text>
+<text x="865.0" y="455.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" ></text>
+<text x="865.0" y="471.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >含 reset_cross / data_cross / ILA</text>
+<rect x="1030.0" y="210.0" width="170.0" height="195.0" fill="#ECEFF1" stroke="#546E7A" stroke-width="2" rx="5"/>
+<text x="1115.0" y="311.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">DDR3 SDRAM</text>
+<text x="1115.0" y="327.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >颗粒 #0</text>
+<text x="1115.0" y="343.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >16-bit 数据总线</text>
+<text x="1115.0" y="359.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >addr[13:0] / ba[2:0]</text>
+<text x="1115.0" y="375.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >CK/CKE/CS/RAS/CAS/WE</text>
+<text x="1115.0" y="391.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >DQ/DQS/DM/ODT</text>
+<text x="1115.0" y="407.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >sys_clk=200MHz</text>
+<line x1="110.0" y1="180.0" x2="110.0" y2="188.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="110.0" y1="188.0" x2="95.0" y2="188.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="95.0" y1="188.0" x2="95.0" y2="197.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="95.0" y1="197.0" x2="80.0" y2="197.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="80.0" y1="197.0" x2="80.0" y2="205.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="80.0,205.0 76.2,195.2 83.8,195.2" fill="#E65100"/>
+<text x="118.0" y="210.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >din_empty</text>
+<line x1="190.0" y1="145.0" x2="200.0" y2="145.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="200.0" y1="145.0" x2="200.0" y2="190.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="200.0" y1="190.0" x2="240.0" y2="190.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="240.0" y1="190.0" x2="240.0" y2="235.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="240.0" y1="235.0" x2="250.0" y2="235.0" stroke="#1565C0" stroke-width="2.5"/>
+<polygon points="250.0,235.0 240.2,238.8 240.2,231.2" fill="#1565C0"/>
+<text x="195.0" y="165.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#1565C0" text-anchor="start" >din[31:0]</text>
+<line x1="230.0" y1="245.0" x2="240.0" y2="245.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="245.0" x2="240.0" y2="255.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="255.0" x2="240.0" y2="255.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="255.0" x2="240.0" y2="265.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="265.0" x2="250.0" y2="265.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="250.0,265.0 240.2,268.9 240.2,261.1" fill="#E65100"/>
+<text x="235.0" y="260.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >wr_flag_0, din_rd_en</text>
+<line x1="450.0" y1="235.0" x2="460.0" y2="235.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="460.0" y1="235.0" x2="460.0" y2="187.5" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="460.0" y1="187.5" x2="490.0" y2="187.5" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="490.0" y1="187.5" x2="490.0" y2="140.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="490.0" y1="140.0" x2="500.0" y2="140.0" stroke="#1565C0" stroke-width="2.5"/>
+<polygon points="500.0,140.0 490.2,143.8 490.2,136.2" fill="#1565C0"/>
+<text x="455.0" y="220.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#1565C0" text-anchor="start" >ddr3_0_din[31:0]</text>
+<text x="455.0" y="237.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >ddr3_0_din_wr_en</text>
+<line x1="680.0" y1="145.0" x2="690.0" y2="145.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="690.0" y1="145.0" x2="690.0" y2="180.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="690.0" y1="180.0" x2="720.0" y2="180.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="720.0" y1="180.0" x2="720.0" y2="215.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="720.0" y1="215.0" x2="730.0" y2="215.0" stroke="#1565C0" stroke-width="2.5"/>
+<polygon points="730.0,215.0 720.2,218.8 720.2,211.2" fill="#1565C0"/>
+<text x="685.0" y="135.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#1565C0" text-anchor="start" >fifo_wr_dout</text>
+<text x="685.0" y="150.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#1565C0" text-anchor="start" >→app_wdf_data[63:0]</text>
+<line x1="680.0" y1="260.0" x2="690.0" y2="260.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="690.0" y1="260.0" x2="690.0" y2="267.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="690.0" y1="267.5" x2="720.0" y2="267.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="720.0" y1="267.5" x2="720.0" y2="275.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="720.0" y1="275.0" x2="730.0" y2="275.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="730.0,275.0 720.2,278.9 720.2,271.1" fill="#E65100"/>
+<text x="685.0" y="270.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >rd_flag, addr[31:0]</text>
+<line x1="1000.0" y1="255.0" x2="1010.0" y2="255.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1010.0" y1="255.0" x2="1010.0" y2="262.5" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1010.0" y1="262.5" x2="1020.0" y2="262.5" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1020.0" y1="262.5" x2="1020.0" y2="270.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1020.0" y1="270.0" x2="1030.0" y2="270.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<polygon points="1030.0,270.0 1020.2,273.9 1020.2,266.1" fill="#C62828"/>
+<text x="1005.0" y="250.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#C62828" text-anchor="start" >PHY总线 (写)</text>
+<line x1="1030.0" y1="340.0" x2="1020.0" y2="340.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1020.0" y1="340.0" x2="1020.0" y2="337.5" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1020.0" y1="337.5" x2="1010.0" y2="337.5" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1010.0" y1="337.5" x2="1010.0" y2="335.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1010.0" y1="335.0" x2="1000.0" y2="335.0" stroke="#2E7D32" stroke-width="2"/>
+<polygon points="1000.0,335.0 1009.8,331.1 1009.8,338.9" fill="#2E7D32"/>
+<text x="870.0" y="350.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >app_rd_data[63:0] (读)</text>
+<line x1="865.0" y1="460.0" x2="855.0" y2="460.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="855.0" y1="460.0" x2="855.0" y2="427.5" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="855.0" y1="427.5" x2="690.0" y2="427.5" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="690.0" y1="427.5" x2="690.0" y2="395.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="690.0" y1="395.0" x2="680.0" y2="395.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="680.0,395.0 689.8,391.1 689.8,398.9" fill="#2E7D32"/>
+<text x="520.0" y="380.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >app_rd_data[63:0]</text>
+<text x="520.0" y="397.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >app_rd_data_valid</text>
+<line x1="590.0" y1="440.0" x2="590.0" y2="448.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="590.0" y1="448.0" x2="567.5" y2="448.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="567.5" y1="448.0" x2="567.5" y2="487.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="567.5" y1="487.0" x2="545.0" y2="487.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="545.0" y1="487.0" x2="545.0" y2="495.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="545.0,495.0 541.1,485.2 548.9,485.2" fill="#2E7D32"/>
+<line x1="500.0" y1="165.0" x2="490.0" y2="165.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="165.0" x2="490.0" y2="227.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="227.5" x2="460.0" y2="227.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="460.0" y1="227.5" x2="460.0" y2="290.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="460.0" y1="290.0" x2="450.0" y2="290.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<polygon points="450.0,290.0 459.8,286.1 459.8,293.9" fill="#E65100"/>
+<text x="310.0" y="280.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >din_prog_full（背压）</text>
+<line x1="230.0" y1="285.0" x2="240.0" y2="285.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="285.0" x2="240.0" y2="257.5" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="257.5" x2="490.0" y2="257.5" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="257.5" x2="490.0" y2="230.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="230.0" x2="500.0" y2="230.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<polygon points="500.0,230.0 490.2,233.8 490.2,226.2" fill="#C62828"/>
+<text x="235.0" y="305.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#C62828" text-anchor="start" >wr_flag_0 → data_cross → clk_ddr3_0</text>
+<line x1="730.0" y1="410.0" x2="720.0" y2="410.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="720.0" y1="410.0" x2="720.0" y2="357.5" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="720.0" y1="357.5" x2="240.0" y2="357.5" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="357.5" x2="240.0" y2="305.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="305.0" x2="230.0" y2="305.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<polygon points="230.0,305.0 239.8,301.1 239.8,308.9" fill="#C62828"/>
+<rect x="25.0" y="475.0" width="1460.0" height="380.0" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2" rx="6"/>
+<text x="35.0" y="494.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="13" fill="#2E7D32" text-anchor="start" font-weight="bold">通道 1 — fifo_ddr_1（mig_7series_1, ADDR_INITIAL=0xFFFF_FFFF，结构与通道0相同）</text>
+<rect x="250.0" y="580.0" width="200.0" height="110.0" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="1.5" rx="5"/>
+<text x="350.0" y="639.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">输入数据分发</text>
+<text x="350.0" y="655.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_1_din = din</text>
+<text x="350.0" y="671.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_1_din_wr_en</text>
+<text x="350.0" y="687.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >  = din_rd_en & wr_flag_1</text>
+<text x="350.0" y="703.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_flag_1 = ~wr_flag_0</text>
+<rect x="500.0" y="510.0" width="180.0" height="75.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="551.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">写异步 FIFO</text>
+<text x="590.0" y="567.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >fifo_async_1024x32</text>
+<text x="590.0" y="583.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr_clk=clk | rd_clk=clk_ddr3_1</text>
+<rect x="500.0" y="610.0" width="180.0" height="85.0" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="656.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">rd_flag 状态机</text>
+<text x="590.0" y="672.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_flag=0:写 | 1:读</text>
+<text x="590.0" y="688.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >+ 地址生成</text>
+<text x="590.0" y="704.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >addr满→翻转</text>
+<rect x="500.0" y="735.0" width="180.0" height="80.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5" rx="5"/>
+<text x="590.0" y="779.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">读异步 FIFO</text>
+<text x="590.0" y="795.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >fifo_async_1024x32</text>
+<text x="590.0" y="811.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >wr=clk_ddr3_1 | rd=clk</text>
+<text x="590.0" y="827.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >prog_full→暂停</text>
+<rect x="730.0" y="545.0" width="270.0" height="280.0" fill="#FFEBEE" stroke="#B71C1C" stroke-width="2" rx="5"/>
+<text x="865.0" y="689.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">mig_7series_1</text>
+<text x="865.0" y="705.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_en_wr = ~rd_flag & ~wr_empty & rdy</text>
+<text x="865.0" y="721.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_en_rd = rd_flag & ~rd_prog_full</text>
+<text x="865.0" y="737.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_wdf_data = {32'd0,fifo_wr_dout}</text>
+<text x="865.0" y="753.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >app_addr = {addr[0+:25],3'b000}</text>
+<text x="865.0" y="769.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_wr_full → data_cross → clk域</text>
+<text x="865.0" y="785.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" ></text>
+<text x="865.0" y="801.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >含 reset_cross / data_cross / ILA</text>
+<rect x="1030.0" y="595.0" width="170.0" height="175.0" fill="#ECEFF1" stroke="#546E7A" stroke-width="2" rx="5"/>
+<text x="1115.0" y="686.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">DDR3 SDRAM</text>
+<text x="1115.0" y="702.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >颗粒 #1</text>
+<text x="1115.0" y="718.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >16-bit 数据总线</text>
+<text x="1115.0" y="734.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >CK/CKE/CS/RAS/CAS/WE</text>
+<text x="1115.0" y="750.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >DQ/DQS/DM/ODT</text>
+<text x="1115.0" y="766.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >sys_clk=200MHz</text>
+<line x1="450.0" y1="610.0" x2="460.0" y2="610.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="460.0" y1="610.0" x2="460.0" y2="575.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="460.0" y1="575.0" x2="490.0" y2="575.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="490.0" y1="575.0" x2="490.0" y2="540.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="490.0" y1="540.0" x2="500.0" y2="540.0" stroke="#1565C0" stroke-width="2.5"/>
+<polygon points="500.0,540.0 490.2,543.9 490.2,536.1" fill="#1565C0"/>
+<text x="455.0" y="595.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#1565C0" text-anchor="start" >ddr3_1_din[31:0]</text>
+<text x="455.0" y="612.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >ddr3_1_din_wr_en</text>
+<line x1="680.0" y1="545.0" x2="690.0" y2="545.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="690.0" y1="545.0" x2="690.0" y2="572.5" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="690.0" y1="572.5" x2="720.0" y2="572.5" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="720.0" y1="572.5" x2="720.0" y2="600.0" stroke="#1565C0" stroke-width="2.5"/>
+<line x1="720.0" y1="600.0" x2="730.0" y2="600.0" stroke="#1565C0" stroke-width="2.5"/>
+<polygon points="730.0,600.0 720.2,603.9 720.2,596.1" fill="#1565C0"/>
+<text x="685.0" y="535.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#1565C0" text-anchor="start" >fifo_wr_dout→MIG</text>
+<line x1="680.0" y1="650.0" x2="690.0" y2="650.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="690.0" y1="650.0" x2="690.0" y2="650.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="690.0" y1="650.0" x2="720.0" y2="650.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="720.0" y1="650.0" x2="720.0" y2="650.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="720.0" y1="650.0" x2="730.0" y2="650.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="730.0,650.0 720.2,653.9 720.2,646.1" fill="#E65100"/>
+<text x="685.0" y="660.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >rd_flag, addr</text>
+<line x1="1000.0" y1="640.0" x2="1010.0" y2="640.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1010.0" y1="640.0" x2="1010.0" y2="645.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1010.0" y1="645.0" x2="1020.0" y2="645.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1020.0" y1="645.0" x2="1020.0" y2="650.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<line x1="1020.0" y1="650.0" x2="1030.0" y2="650.0" stroke="#C62828" stroke-width="2" stroke-dasharray="4,3"/>
+<polygon points="1030.0,650.0 1020.2,653.9 1020.2,646.1" fill="#C62828"/>
+<text x="1005.0" y="633.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#C62828" text-anchor="start" >PHY总线 (写)</text>
+<line x1="1030.0" y1="710.0" x2="1020.0" y2="710.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1020.0" y1="710.0" x2="1020.0" y2="710.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1020.0" y1="710.0" x2="1010.0" y2="710.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1010.0" y1="710.0" x2="1010.0" y2="710.0" stroke="#2E7D32" stroke-width="2"/>
+<line x1="1010.0" y1="710.0" x2="1000.0" y2="710.0" stroke="#2E7D32" stroke-width="2"/>
+<polygon points="1000.0,710.0 1009.8,706.1 1009.8,713.9" fill="#2E7D32"/>
+<text x="870.0" y="725.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >app_rd_data (读)</text>
+<line x1="865.0" y1="825.0" x2="855.0" y2="825.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="855.0" y1="825.0" x2="855.0" y2="800.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="855.0" y1="800.0" x2="690.0" y2="800.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="690.0" y1="800.0" x2="690.0" y2="775.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="690.0" y1="775.0" x2="680.0" y2="775.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="680.0,775.0 689.8,771.1 689.8,778.9" fill="#2E7D32"/>
+<text x="520.0" y="760.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >app_rd_data[63:0]</text>
+<line x1="590.0" y1="815.0" x2="590.0" y2="823.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="590.0" y1="823.0" x2="557.5" y2="823.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="557.5" y1="823.0" x2="557.5" y2="867.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="557.5" y1="867.0" x2="525.0" y2="867.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="525.0" y1="867.0" x2="525.0" y2="875.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="525.0,875.0 521.1,865.2 528.9,865.2" fill="#2E7D32"/>
+<line x1="500.0" y1="565.0" x2="490.0" y2="565.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="565.0" x2="490.0" y2="612.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="612.5" x2="460.0" y2="612.5" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="460.0" y1="612.5" x2="460.0" y2="660.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="460.0" y1="660.0" x2="450.0" y2="660.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4,3"/>
+<polygon points="450.0,660.0 459.8,656.1 459.8,663.9" fill="#E65100"/>
+<text x="310.0" y="650.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >din_prog_full（背压）</text>
+<line x1="230.0" y1="300.0" x2="240.0" y2="300.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="300.0" x2="240.0" y2="462.5" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="462.5" x2="490.0" y2="462.5" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="462.5" x2="490.0" y2="625.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<line x1="490.0" y1="625.0" x2="500.0" y2="625.0" stroke="#C62828" stroke-width="1.8" stroke-dasharray="4,3"/>
+<polygon points="500.0,625.0 490.2,628.9 490.2,621.1" fill="#C62828"/>
+<text x="235.0" y="320.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#C62828" text-anchor="start" >wr_flag_1 → data_cross → clk_ddr3_1</text>
+<line x1="730.0" y1="785.0" x2="720.0" y2="785.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="720.0" y1="785.0" x2="720.0" y2="550.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="720.0" y1="550.0" x2="240.0" y2="550.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="550.0" x2="240.0" y2="315.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<line x1="240.0" y1="315.0" x2="230.0" y2="315.0" stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3"/>
+<polygon points="230.0,315.0 239.8,311.1 239.8,318.9" fill="#C62828"/>
+<line x1="130.0" y1="320.0" x2="130.0" y2="328.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="130.0" y1="328.0" x2="240.0" y2="328.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="328.0" x2="240.0" y2="572.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="572.0" x2="350.0" y2="572.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="350.0" y1="572.0" x2="350.0" y2="580.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="350.0,580.0 346.1,570.2 353.9,570.2" fill="#E65100"/>
+<text x="20.0" y="365.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >wr_flag_1 = ~wr_flag_0</text>
+<rect x="25.0" y="875.0" width="1460.0" height="175.0" fill="#E8F0FE" stroke="#1565C0" stroke-width="2" rx="6"/>
+<text x="35.0" y="894.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="13" fill="#1565C0" text-anchor="start" font-weight="bold">输出路径 — 乒乓读侧数据汇聚 + 校验</text>
+<rect x="30.0" y="910.0" width="200.0" height="125.0" fill="#FCE4EC" stroke="#AD1457" stroke-width="1.5" rx="5"/>
+<text x="130.0" y="976.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">输出 MUX</text>
+<text x="130.0" y="992.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >dd3_dout = rd_flag_0 ?</text>
+<text x="130.0" y="1008.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >  ddr3_0_dout : ddr3_1_dout</text>
+<text x="130.0" y="1024.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >dout_rd_en仅给被选中通道</text>
+<text x="130.0" y="1040.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_flag_0读完addr_size→翻转</text>
+<rect x="250.0" y="910.0" width="180.0" height="125.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5" rx="5"/>
+<text x="340.0" y="976.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">输出 FIFO</text>
+<text x="340.0" y="992.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >fifo_async_16x32</text>
+<text x="340.0" y="1008.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >缓冲数据, 平滑输出</text>
+<text x="340.0" y="1024.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >prog_full→dd3_dout_rd_en停</text>
+<text x="340.0" y="1040.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >同频: wr_clk=rd_clk=clk</text>
+<rect x="470.0" y="910.0" width="190.0" height="125.0" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.5" rx="5"/>
+<text x="565.0" y="976.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">读控制逻辑</text>
+<text x="565.0" y="992.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_flag_0 / rd_cnt[31:0]</text>
+<text x="565.0" y="1008.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >rd_cnt满→rd_flag_0翻转</text>
+<text x="565.0" y="1024.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >dd3_dout_rd_en流控:</text>
+<text x="565.0" y="1040.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >alempty≠0→读, prog_full→停</text>
+<rect x="660.0" y="910.0" width="130.0" height="125.0" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5" rx="5"/>
+<text x="725.0" y="976.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">dout[31:0]</text>
+<text x="725.0" y="992.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >dout_empty</text>
+<text x="725.0" y="1008.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >dout_alempty</text>
+<text x="725.0" y="1024.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >← 外部dout_rd_en</text>
+<rect x="700.0" y="910.0" width="210.0" height="125.0" fill="#E1F5FE" stroke="#0277BD" stroke-width="1.5" rx="5"/>
+<text x="805.0" y="976.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#212121" text-anchor="middle" font-weight="bold">TB 数据校验</text>
+<text x="805.0" y="992.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >ddr3_model × 2 (仿真模型)</text>
+<text x="805.0" y="1008.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >数据自增序列比对:</text>
+<text x="805.0" y="1024.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >  dout == ddr_dout + 1 ?</text>
+<text x="805.0" y="1040.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#616161" text-anchor="middle" >不匹配 → error=1</text>
+<line x1="545.0" y1="495.0" x2="545.0" y2="503.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="545.0" y1="503.0" x2="320.8" y2="503.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="320.8" y1="503.0" x2="320.8" y2="902.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="320.8" y1="902.0" x2="96.7" y2="902.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="96.7" y1="902.0" x2="96.7" y2="910.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="96.7,910.0 92.8,900.2 100.5,900.2" fill="#2E7D32"/>
+<text x="455.0" y="535.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#2E7D32" text-anchor="start" >ddr3_0_dout[31:0]</text>
+<text x="455.0" y="552.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >dout_empty / alempty</text>
+<line x1="525.0" y1="875.0" x2="525.0" y2="883.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="525.0" y1="883.0" x2="344.2" y2="883.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="344.2" y1="883.0" x2="344.2" y2="992.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="344.2" y1="992.0" x2="163.3" y2="992.0" stroke="#2E7D32" stroke-width="2.5"/>
+<line x1="163.3" y1="992.0" x2="163.3" y2="1000.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="163.3,1000.0 159.5,990.2 167.2,990.2" fill="#2E7D32"/>
+<text x="425.0" y="920.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#2E7D32" text-anchor="start" >ddr3_1_dout[31:0]</text>
+<text x="425.0" y="937.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#2E7D32" text-anchor="start" >dout_empty / alempty</text>
+<line x1="230.0" y1="970.0" x2="250.0" y2="970.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="250.0,970.0 240.2,973.9 240.2,966.1" fill="#2E7D32"/>
+<text x="235.0" y="962.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#2E7D32" text-anchor="start" >dd3_dout[31:0]</text>
+<line x1="430.0" y1="970.0" x2="660.0" y2="970.0" stroke="#2E7D32" stroke-width="2.5"/>
+<polygon points="660.0,970.0 650.2,973.9 650.2,966.1" fill="#2E7D32"/>
+<text x="435.0" y="962.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#2E7D32" text-anchor="start" >fifo_dout</text>
+<text x="435.0" y="988.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >fifo_rd_en=dout_rd_en</text>
+<line x1="660.0" y1="940.0" x2="650.0" y2="940.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="650.0" y1="940.0" x2="650.0" y2="945.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="650.0" y1="945.0" x2="240.0" y2="945.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="945.0" x2="240.0" y2="950.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="950.0" x2="230.0" y2="950.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="230.0,950.0 239.8,946.1 239.8,953.9" fill="#E65100"/>
+<text x="440.0" y="928.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >rd_flag_0（MUX选通）</text>
+<line x1="560.0" y1="910.0" x2="560.0" y2="918.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="560.0" y1="918.0" x2="345.0" y2="918.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="345.0" y1="918.0" x2="345.0" y2="892.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="345.0" y1="892.0" x2="130.0" y2="892.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="130.0" y1="892.0" x2="130.0" y2="900.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="130.0,900.0 126.2,890.2 133.8,890.2" fill="#E65100"/>
+<text x="565.0" y="898.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >ddr3_X_dout_rd_en（仅给选中通道）</text>
+<line x1="250.0" y1="1015.0" x2="240.0" y2="1015.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="1015.0" x2="240.0" y2="1015.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="240.0" y1="1015.0" x2="480.0" y2="1015.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="480.0" y1="1015.0" x2="480.0" y2="1015.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="480.0" y1="1015.0" x2="470.0" y2="1015.0" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polygon points="470.0,1015.0 479.8,1011.1 479.8,1018.9" fill="#E65100"/>
+<text x="270.0" y="1030.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="8" fill="#E65100" text-anchor="start" >fifo_prog_full（背压）</text>
+<text x="1320.0" y="120.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#E65100" text-anchor="middle" font-weight="bold">乒乓切换时序</text>
+<text x="1240.0" y="142.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >Phase 1: wr_flag_0 = 1</text>
+<text x="1240.0" y="159.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >  写 → DDR3_0      读 ← DDR3_1</text>
+<text x="1240.0" y="176.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >Phase 2: wr_flag_0 = 0</text>
+<text x="1240.0" y="193.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >  写 → DDR3_1      读 ← DDR3_0</text>
+<text x="1240.0" y="210.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#E65100" text-anchor="start" >翻转: wr_cnt>=addr_size-1 && din_rd_en</text>
+<text x="1240.0" y="227.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >rd_flag_0同: rd_cnt>=addr_size-1</text>
+<text x="1320.0" y="510.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="12" fill="#C62828" text-anchor="middle" font-weight="bold">跨时钟域处理</text>
+<text x="1240.0" y="532.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >数据路径: 异步FIFO (clk↔clk_ddr3)</text>
+<text x="1240.0" y="549.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >复位: reset_cross</text>
+<text x="1240.0" y="566.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >  rst_n(clk) → rst_n_ddr</text>
+<text x="1240.0" y="583.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >单bit标志: data_cross</text>
+<text x="1240.0" y="600.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >  wr_flag_X → clk_ddr3_X</text>
+<text x="1240.0" y="617.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >  ddr3_wr_full → clk</text>
+<text x="1240.0" y="634.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#546E7A" text-anchor="start" >输出FIFO: 同频 clk↔clk</text>
+<text x="1320.0" y="920.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="11" fill="#212121" text-anchor="middle" font-weight="bold">图例</text>
+<rect x="1240.0" y="940.0" width="13.0" height="13.0" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1" rx="3"/>
+<text x="1258.0" y="951.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >异步FIFO</text>
+<rect x="1340.0" y="940.0" width="13.0" height="13.0" fill="#FFEBEE" stroke="#B71C1C" stroke-width="1" rx="3"/>
+<text x="1358.0" y="951.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >MIG IP</text>
+<rect x="1440.0" y="940.0" width="13.0" height="13.0" fill="#ECEFF1" stroke="#546E7A" stroke-width="1" rx="3"/>
+<text x="1458.0" y="951.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >DDR3 SDRAM</text>
+<rect x="1240.0" y="962.0" width="13.0" height="13.0" fill="#FFFDE7" stroke="#F9A825" stroke-width="1" rx="3"/>
+<text x="1258.0" y="973.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >控制逻辑</text>
+<rect x="1340.0" y="962.0" width="13.0" height="13.0" fill="#FCE4EC" stroke="#AD1457" stroke-width="1" rx="3"/>
+<text x="1358.0" y="973.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >MUX/端口</text>
+<rect x="1440.0" y="962.0" width="13.0" height="13.0" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1" rx="3"/>
+<text x="1458.0" y="973.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >clk域</text>
+<rect x="1240.0" y="984.0" width="13.0" height="13.0" fill="#FFF8E1" stroke="#FFE082" stroke-width="1" rx="3"/>
+<text x="1258.0" y="995.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >clk_ddr3域</text>
+<rect x="1340.0" y="984.0" width="13.0" height="13.0" fill="#1565C0" stroke="#1565C0" stroke-width="1" rx="3"/>
+<text x="1358.0" y="995.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >写数据</text>
+<rect x="1440.0" y="984.0" width="13.0" height="13.0" fill="#2E7D32" stroke="#2E7D32" stroke-width="1" rx="3"/>
+<text x="1458.0" y="995.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >读数据</text>
+<rect x="1240.0" y="1006.0" width="13.0" height="13.0" fill="#E65100" stroke="#E65100" stroke-width="1" rx="3"/>
+<text x="1258.0" y="1017.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >控制</text>
+<rect x="1340.0" y="1006.0" width="13.0" height="13.0" fill="#C62828" stroke="#C62828" stroke-width="1" rx="3"/>
+<text x="1358.0" y="1017.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="9" fill="#212121" text-anchor="start" >跨时钟</text>
+</svg>

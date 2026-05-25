@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh search *)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(npx skills *)",
+      "Bash(python gen_block_diagram.py)",
+      "Bash(python *)"
+    ]
+  }
+}
